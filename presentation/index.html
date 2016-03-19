@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Establish document -->
+		<title>Ocean Degradation</title>
+		<meta charset = "utf-8" />
+		
+		<!-- Enclosed stylesheet -->
+		<style>
+			@font-face {
+				font-family: "PSans";
+				src: url("PSans.ttf") format("truetype");
+			}
+			@font-face {
+				font-family: "PSansLight";
+				src: url("PSansLight.ttf") format("truetype");
+			}
+			@font-face {
+				font-family: "PTitle";
+				src: url("PTitle.ttf") format("truetype");
+			}
+			@font-face {
+				font-family: "PSerif";
+				src: url("PSerif.ttf") format("truetype");
+			}
+			html, body {
+				width: 100%;
+				height: 100%;
+				padding: 0;
+				margin: 0;
+			}
+			table {
+				border-collapse: collapse;
+			}
+			.slide, .slide table {
+				width: 100%;
+				height: 100%;
+			}
+			.large {
+				width: 60%;
+			}
+			#introBackdrop {
+				background-image: url("intro.png");
+				background-size: cover;
+				background-position: center;
+			}
+			.centerTitle {
+				text-align: center;
+			}
+			.titleFont {
+				font-family: "PTitle", serif;
+				font-size: 40px;
+			}
+			#nameFont {
+				font-family: "PSerif", sans-serif;
+				font-size: 25px;
+			}
+			#firstTitle {
+				color: #2c3e50;
+			}
+			#firstTitle * {
+				margin: 30px 0 30px 0;
+			}
+			
+			
+			
+			#two {
+				opacity: 0;
+				display: none;
+				color: #2c3e50;
+			}
+			#ocean {
+				font-family: "PTitle", serif;
+				font-size: 70px;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Import jQuery library -->
+		<script type = "text/javascript" src = "jquery.js"></script>
+	
+		<!-- Slides of presentation -->
+		<div class = "slide" id = "one">
+			<table>
+				<tr>
+					<td class = "large" id = "introBackdrop">
+					</td>
+					<td class = "centerTitle" id = "firstTitle">
+						<span class = "titleFont">OCEAN DEGRADATION</span>
+						<br>
+						<span id = "nameFont">ROBBEN MIGACZ</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class = "slide" id = "two">
+			<table>
+				<tr>
+					<td class = "centerTitle" id = "ocean">
+						Ocean.
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+		<!-- Animation and controls -->
+		<script type = "text/javascript">
+			// Advance from slide 1 to 2
+			$("#firstTitle").click(function() {
+				$("#introBackdrop").animate({
+					width: 0
+				}, 1500, function() {
+					$("#introBackdrop").hide()
+					$("#one").animate({
+						opacity: 0
+					}, 2000, function() {
+						$("#one").hide()
+						$("#two").show()
+						$("#two").animate({
+							opacity: 1
+						}, 1000)
+					});
+				});
+			});
+		</script>
+	</body>
+</html>
