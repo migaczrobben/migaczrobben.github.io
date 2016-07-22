@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Documentation</title>
+		<meta charset = "utf-8">
+		<style>
+			@font-face {
+				font-family: "RobotoRegular";
+				src: url("Resources/Fonts/RobotoRegular.ttf")
+			}
+			@font-face {
+				font-family: "RobotoMedium";
+				src: url("Resources/Fonts/RobotoMedium.ttf")
+			}
+			@font-face {
+				font-family: "RobotoMonoRegular";
+				src: url("Resources/Fonts/RobotoMonoRegular.ttf")
+			}
+			html, body {
+				color: #333333;
+				font-family: "RobotoRegular", sans-serif;
+				font-size: 1em;
+				margin: 0;
+				padding: 0;
+			}
+			pre {
+				display: inline;
+			}
+
+			a:link {
+				text-decoration: none;
+				color: #3498db;
+			}
+			a:hover {
+				color: #2980b9;
+			}
+			a:visited {
+				color: #9b59b6;
+			}
+
+			.minor {
+				font-family: "RobotoMedium";
+				margin-top: 15px;
+			}
+			.program {
+				font-family: "RobotoMonoRegular", monospace;
+				line-height: 1.4em;
+				margin: 5px 0 5px 0;
+				overflow: auto;
+				padding: 15px !important;
+			}
+			.program_comment {
+				color: #777777;
+			}
+			.program_header {
+				color: #e74c3c;
+			}
+			.program_output {
+				border-left: 2px solid #3498db;
+				padding-left: 15px !important;
+			}
+			.program_string {
+				color: #9b59b6;
+			}
+			.program_system {
+				color: #3498db;
+			}
+			.program_title {
+				color: #3498db;
+				display: block;
+				font-family: "RobotoMedium", sans-serif;
+			}
+			.program_value {
+				color: #2ecc71;
+			}
+			.small_program {
+				font-family: "RobotoMonoRegular", monospace;
+			}
+			.text {
+				text-align: justify;
+				line-height: 1.2em;
+			}
+
+			#content {
+				margin: auto;
+				padding: 20px;
+				width: 80%;
+			}
+			#header {
+				background-color: #eeeeee;
+				padding: 20px 10% 20px 10%;
+			}
+			#header img {
+				height: 3em;
+			}
+			#interior {
+				padding: 10px 0 10px 0;
+			}
+			#interior * {
+				padding: 5px 0 0 0;
+			}
+			#navigation ul {
+				font-size: 1.2em;
+				list-style-type: none;
+				padding-left: 0px;
+			}
+			#navigation ul li {
+				display: inline-block;
+				margin-right: 10px;
+			}
+			#page_title {
+				font-family: "RobotoMedium";
+				font-size: 1.6em;
+				margin-bottom: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id = "header"><img src = "Resources/emblem.svg"></div>
+		<div id = "content">
+			<div id = "navigation">
+				<ul>
+					<li><a href = "http://localhost/source/">Home</a></li>
+					<li><a href = "http://localhost/source/">Directory</a></li>
+					<li><a href = "http://localhost/source/">Example</a></li>
+				</ul>
+			</div>
+			<div id = "page_title">Introduction to Parallel Programming</div>
+			<div id = "interior">
+
+				<div class = "minor" id = "Description">Description</div>
+				<div class = "text">Text.</div>
+
+				<div class = "minor" id = "Installation">Installation</div>
+				<div class = "text">Text.</div>
+
+				<div class = "minor" id = "Examples">Examples</div>
+				<div class = "text">This program displays a message from each running process. It's known as a "single-instruction" program, as the same task is done by each process. This distinction makes developing and scaling simple; changes between iterations are minimal.</div>
+				<div class = "program"><span class = "program_title">hello.c</span>
+<pre><code><span class = "program_header">#include</span> <span class = "program_string">&lt;mpi.h&gt;</span>
+<span class = "program_header">#include</span> <span class = "program_string">&lt;stdio.h&gt;</span>
+<span class = "program_system">int</span> main() {
+  MPI_Init(<span class = "program_value">NULL</span>, <span class = "program_value">NULL</span>);
+  <span class = "program_system">int</span> size;
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  <span class = "program_system">int</span> rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  <span class = "program_system">int</span> source;
+  <span class = "program_system">if</span> (rank != <span class = "program_value">0</span>) {
+    MPI_Send(&rank, <span class = "program_value">1</span>, MPI_INT, <span class = "program_value">0</span>, <span class = "program_value">0</span>, MPI_COMM_WORLD);
+  } <span class = "program_system">else</span> {
+    <span class = "program_system">printf</span>(<span class = "program_string">"I'm process 0!\n"</span>);
+    <span class = "program_system">for</span> (source = <span class = "program_value">1</span>; source &lt; size; source++) {
+      MPI_Recv(&rank, <span class = "program_value">1</span>, MPI_INT, source, <span class = "program_value">0</span>, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+      <span class = "program_system">printf</span>(<span class = "program_string">"Received a message from process %d!\n"</span>, source);
+    }
+  }
+  MPI_Finalize();
+  <span class = "program_system">return</span>(<span class = "program_value">0</span>);
+}</code></pre>
+				</div>
+				<div class = "text">Compiling parallel programs is typically done with a "wrapper," which provides all the necessary files. As an example, <span class = "small_program">MPICH2</span> can be used with <span class = "small_program">gcc</span> (though other packages are available for a number of compilers). If everything has been set up correctly, this will compile the program and run it with the specified number of processes.</div>
+				<div class = "program">
+<pre><code>$ module load gcc
+$ module load gcc mpich2
+$ mpicc -g -Wall -o hello hello.c
+$ mpiexec -n 4 ./hello
+<div class = "program_output">I'm process 0!
+Received a message from process 1!
+Received a message from process 2!
+Received a message from process 3!</span></code></pre>
+				</div>
+				<div class = "text">This program can be run on high-performance resources by submitting a job. Users can customize the job's environment, including the number of nodes and processes to use, the name of the output and error files, and the time for which the program will run (if not to completion). To determine which account and partition you should use, run <span class = "small_program">sacctmgr -p show assoc user=u0123456</span>.</div>
+				<div class = "program"><span class = "program_title">your_job_script.slurm</span>
+<pre><code>#!/bin/csh
+#SBATCH --time=0:10:00
+#SBATCH --nodes=2
+#SBATCH -o slurm-%j.out-%N
+#SBATCH -e slurm-%j.err-%N
+#SBATCH --ntasks=16
+#SBATCH --account=owner-guest
+#SBATCH --partition=kingspeak-guest
+mpiexec -n 16 ./hello</code></pre>
+				</div>
+				<div class = "text">The job script is sent using <span class = "small_program">sbatch</span>. It will run when resources become available.</div>
+				<div class = "program">
+<pre><code>$ sbatch your_job_script.slurm
+<div class = "program_output">Submitted batch job 0123456</div></code></pre>
+				</div>
+				<div class = "text">If all goes well, output becomes available shortly after the program runs.</div>
+				<div class = "program"><span class = "program_title">slurm-0123456.out-kp001</span>
+<pre><code>I'm process 0!
+Received a message from process 1!
+Received a message from process 2!
+Received a message from process 3!
+Received a message from process 4!
+Received a message from process 5!
+Received a message from process 6!
+Received a message from process 7!
+Received a message from process 8!
+Received a message from process 9!
+Received a message from process 10!
+Received a message from process 11!
+Received a message from process 12!
+Received a message from process 13!
+Received a message from process 14!
+Received a message from process 15!</code></pre>
+				</div>
+				<div class = "text">This has clear implications for data-driven scientific computation. Single-instruction programs can be used to process large sets of data very quickly; individual processes perform computations on a portion of the user's information, dividing the work among a number of computers and consequently lowering the time required to finish. These programs are among the easiest to parallelize. As the complexity of computation increases (typically with a need for multiple-instruction programs), however, the programmer's work becomes far more difficult. To make efficient multiple-instruction programs, communication must be minimized.</div>
+
+			</div>
+		</div>
+	</body>
+</html>
